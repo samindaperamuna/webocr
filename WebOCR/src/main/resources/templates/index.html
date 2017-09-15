@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta content="text/html; charset=UTF-8" http-equiv="Content-Type" />
+<title>Demo Select Areas</title>
+
+<link href="css/index.css" media="screen" rel="stylesheet"
+	type="text/css" />
+<link href="plugins/MultiSelectJQuery/resources/jquery.selectareas.css"
+	media="screen" rel="stylesheet" type="text/css" />
+<!--[if lte IE 8]>
+<link href="plugins/MultiSelectJQuery/resources/jquery.selectareas.ie8.css" media="screen" rel="stylesheet" type="text/css" /> 
+<![endif]-->
+
+<script type="text/javascript" src="plugins/JQuery/jquery-3.2.1.js"></script>
+<script type="text/javascript"
+	src="plugins/MultiSelectJQuery/jquery.selectareas.js"></script>
+<script type="text/javascript" src="js/index.js"></script>
+
+</head>
+<body>
+	<div id="wrapper">
+		<h1>Demo Select Areas</h1>
+
+		<div class="image-decorator">
+			<img alt="Image principale" id="example" src="img/example.jpg" />
+		</div>
+		<table>
+			<tr>
+				<td class="actions"><input type="button" id="btnView"
+					value="Display areas" class="actionOn" /> <input type="button"
+					id="btnViewRel" value="Display relative" class="actionOn" /> <input
+					type="button" id="btnNew" value="Add New" class="actionOn" /> <input
+					type="button" id="btnNews" value="Add 2 New" class="actionOn" /> <input
+					type="button" id="btnReset" value="Reset" class="actionOn" /> <input
+					type="button" id="btnDestroy" value="Destroy" class="actionOn" />
+					<input type="button" id="btnCreate" value="Create"
+					class="actionOff" /></td>
+				<td>
+					<div id="output" class='output'></div>
+				</td>
+			</tr>
+		</table>
+
+	</div>
+</body>
+</html>
