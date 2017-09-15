@@ -45,6 +45,6 @@ public class ProcessImage {
 	    }
 	}
 
-	return new ResponseEntity<>("Successfully login", new HttpHeaders(), HttpStatus.OK);
+	return new ResponseEntity<>("Successfully Received", new HttpHeaders(), HttpStatus.OK);
     }
 }
