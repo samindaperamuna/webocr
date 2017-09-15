@@ -19,6 +19,14 @@ input {
 	margin: 10px;
 }
 
+input[type=file] {
+	width: 100%;
+}
+
+img.multi-select {
+	display: block;
+}
+
 #output {
 	margin: 0 20px;
 	padding: 20px;
@@ -32,6 +40,10 @@ input {
 	font-family: monospace;
 	overflow-x: auto;
 	overflow-y: scroll;
+}
+
+legend {
+	margin-left: 10px;
 }
 
 .actions {
@@ -52,6 +64,7 @@ h1 {
 div#wrapper {
 	margin: 25px auto 25px auto;
 	width: 620px;
+	text-align: center;
 }
 
 div.image-decorator {
