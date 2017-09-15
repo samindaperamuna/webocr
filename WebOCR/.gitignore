@@ -22,3 +22,5 @@ nbbuild/
 dist/
 nbdist/
 .nb-gradle/
+/temp.tiff
+/hs_err_pid515.log

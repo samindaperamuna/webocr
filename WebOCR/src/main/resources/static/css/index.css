@@ -23,6 +23,19 @@ input[type=file] {
 	width: 100%;
 }
 
+input[type=button].full-width {
+	width: 100%;
+	margin: unset;
+	margin-top: 10px;
+	margin-bottom: 10px;
+	height: 50px;
+	font-size: large;
+}
+
+fieldset {
+	text-align: left;
+}
+
 img.multi-select {
 	display: block;
 }

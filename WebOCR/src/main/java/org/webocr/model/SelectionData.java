@@ -1,11 +1,11 @@
 package org.webocr.model;
 
-public class ImageSelection {
+public class SelectionData {
 
-    private int x;
-    private int y;
-    private int width;
-    private int height;
+    int x;
+    int y;
+    int width;
+    int height;
 
     public int getX() {
 	return x;
