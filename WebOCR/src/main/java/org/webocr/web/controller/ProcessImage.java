@@ -48,9 +48,10 @@ public class ProcessImage {
 
 	for (SelectionData s : selectionList.getSelectionList()) {
 	    BufferedImage selection = ImageUtil.cropImage(img, s.getX(), s.getY(), s.getWidth(), s.getHeight());
+	    BufferedImage upscaledImage = ImageUtil.upscaleImage(selection);
 
 	    try {
-		File file = ImageUtil.writeToTempFile(selection);
+		File file = ImageUtil.writeToTempFile(upscaledImage);
 		String data = TesseractHandle.processImage(file.getAbsolutePath());
 		System.out.println(data + "\n");
 	    } catch (IOException e) {

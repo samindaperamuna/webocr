@@ -1,6 +1,8 @@
 package org.webocr.util;
 
+import java.awt.Graphics2D;
 import java.awt.Rectangle;
+import java.awt.RenderingHints;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.File;
@@ -22,6 +24,7 @@ public class ImageUtil {
 
     private static final String TEMP_FILE_PATH = "temp.png";
     private static final String FORMAT_NAME = "PNG";
+    private static final int RESCALE_FACTOR = 2;
 
     /**
      * Crop an image with the given rectangle.
@@ -92,5 +95,25 @@ public class ImageUtil {
 	ImageIO.write(img, FORMAT_NAME, file);
 
 	return file;
+    }
+
+    /**
+     * Resize the image by the predefined resize factor.
+     * 
+     * @param image BufferedImage to be resized.
+     * @return
+     */
+    public static BufferedImage upscaleImage(BufferedImage image) {
+	int width = image.getWidth() * RESCALE_FACTOR;
+	int height = image.getHeight() * RESCALE_FACTOR;
+
+	BufferedImage scaledImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
+
+	Graphics2D graphics2D = scaledImage.createGraphics();
+	graphics2D.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
+	graphics2D.drawImage(image, 0, 0, width, height, null);
+	graphics2D.dispose();
+
+	return scaledImage;
     }
 }
