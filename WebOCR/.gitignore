@@ -24,3 +24,5 @@ nbdist/
 .nb-gradle/
 /temp.tiff
 /hs_err_pid515.log
+/hs_err_pid945.log
+/temp.png

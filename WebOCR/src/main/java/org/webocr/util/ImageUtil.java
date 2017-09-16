@@ -20,8 +20,8 @@ import javax.imageio.ImageIO;
  */
 public class ImageUtil {
 
-    private static final String TEMP_FILE_PATH = "temp.tiff";
-    private static final String FORMAT_NAME = "TIFF";
+    private static final String TEMP_FILE_PATH = "temp.png";
+    private static final String FORMAT_NAME = "PNG";
 
     /**
      * Crop an image with the given rectangle.
@@ -31,7 +31,7 @@ public class ImageUtil {
      * @return
      */
     public static BufferedImage cropImage(BufferedImage src, Rectangle rect) {
-	BufferedImage dest = src.getSubimage(0, 0, rect.width, rect.height);
+	BufferedImage dest = src.getSubimage(rect.x, rect.y, rect.width, rect.height);
 
 	return dest;
     }

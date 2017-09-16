@@ -2,6 +2,10 @@
  * Contains the functionality of the index.html
  */
 $(document).ready(function() {
+	toDataURL('../img/example.jpg', function(data) {
+		$('#originalImage')[0].src = data;
+	});
+
 	$('img#originalImage').selectAreas({
 		onChanged : debugQtyAreas
 	});
@@ -71,7 +75,7 @@ $(document).ready(function() {
 
 	// On Send to Server button click.
 	$('#sendButton').on('click', function() {
-		var dataUrl = getBase64String('originalImage');
+		var dataUrl = $('#originalImage')[0].src;
 		var areas = $('img#originalImage').selectAreas('areas');
 		var areasList = [];
 
@@ -156,7 +160,7 @@ function getBase64String(imgId) {
 
 	var img = document.getElementById(imgId);
 
-	ctx.drawImage(img, 10, 10);
+	ctx.drawImage(img, 0, 0);
 
 	return canvas.toDataURL();
 }
@@ -223,4 +227,27 @@ function postCoordData(blob, coords) {
 		console.log(data);
 	}
 	});
+}
+
+/**
+ * Converts file system URL to a base64Image.
+ * 
+ * @param url
+ * @param callback
+ * @returns
+ */
+function toDataURL(url, callback) {
+	var xhr = new XMLHttpRequest();
+
+	xhr.onload = function() {
+		var reader = new FileReader();
+		reader.onloadend = function() {
+			callback(reader.result);
+		}
+		reader.readAsDataURL(xhr.response);
+	};
+
+	xhr.open('GET', url);
+	xhr.responseType = 'blob';
+	xhr.send();
 }
