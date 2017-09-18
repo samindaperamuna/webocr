@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="webocr template.xsd"
+	targetNamespace="webocr" elementFormDefault="qualified">
+
+	<xs:element name="line" />
+
+	<xs:element name="paragraph">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="line">
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="field">
+								<xs:complexType>
+									<xs:attribute name="name" type="xs:string" />
+								</xs:complexType>
+							</xs:element>
+						</xs:sequence>
+						<xs:attribute name="cols" type="xs:integer" />
+						<xs:attribute name="field_name" type="xs:string" />
+					</xs:complexType>
+				</xs:element>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+
+	<xs:element name="iterator">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="line">
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="field">
+								<xs:complexType>
+									<xs:attribute name="name" type="xs:string" />
+								</xs:complexType>
+							</xs:element>
+						</xs:sequence>
+						<xs:attribute name="cols" type="xs:integer" />
+						<xs:attribute name="field_name" type="xs:string" />
+					</xs:complexType>
+				</xs:element>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+</xs:schema>

@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
 <meta content="text/html; charset=UTF-8" http-equiv="Content-Type" />
-<title>Demo Select Areas</title>
+<title>Scan Invoice</title>
 
 <link href="css/index.css" media="screen" rel="stylesheet" type="text/css" />
 <link href="plugins/MultiSelectJQuery/resources/jquery.selectareas.css" media="screen" rel="stylesheet" type="text/css" />
@@ -17,36 +17,40 @@
 </head>
 <body>
 	<div id="wrapper">
-		<h1>Demo Select Areas</h1>
+		<h1>Invoice</h1>
 
 		<div class="image-decorator">
 			<img alt="Image principale" id="originalImage" class="multi-select" />
 		</div>
 
-		<fieldset>
-			<legend>Please select an image</legend>
-			<input id="imageInput" type="file" value="" />
-		</fieldset>
+		<div id="centerPanel">
+			<fieldset>
+				<legend>Please select an invoice</legend>
+				<input id="imageInput" type="file" value="" />
+			</fieldset>
+			<input id="sendButton" type="button" class="full-width" value="Process Invoice" />
 
-		<input id="sendButton" type="button" class="full-width" value="Send to Server" />
+			<fieldset>
+				<legend>Options</legend>
 
-		<table>
-			<tr>
-				<td class="actions">
-					<input type="button" id="btnView" value="Display areas" class="actionOn" />
-					<input type="button" id="btnViewRel" value="Display relative" class="actionOn" />
-					<input type="button" id="btnNew" value="Add New" class="actionOn" />
-					<input type="button" id="btnNews" value="Add 2 New" class="actionOn" />
-					<input type="button" id="btnReset" value="Reset" class="actionOn" />
-					<input type="button" id="btnDestroy" value="Destroy" class="actionOn" />
-					<input type="button" id="btnCreate" value="Create" class="actionOff" />
-				</td>
-				<td>
-					<div id="output" class='output'></div>
-				</td>
-			</tr>
-		</table>
-
+				<table>
+					<tr>
+						<td class="actions">
+							<input type="button" id="btnView" value="Display areas" class="actionOn" />
+							<input type="button" id="btnViewRel" value="Display relative" class="actionOn" />
+							<input type="button" id="btnNew" value="Add New" class="actionOn" />
+							<input type="button" id="btnNews" value="Add 2 New" class="actionOn" />
+							<input type="button" id="btnReset" value="Reset" class="actionOn" />
+							<input type="button" id="btnDestroy" value="Destroy" class="actionOn" />
+							<input type="button" id="btnCreate" value="Create" class="actionOff" />
+						</td>
+						<td>
+							<div id="output" class='output'></div>
+						</td>
+					</tr>
+				</table>
+			</fieldset>
+		</div>
 	</div>
 </body>
 </html>
