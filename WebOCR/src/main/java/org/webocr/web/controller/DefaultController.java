@@ -10,4 +10,9 @@ public class DefaultController {
     public String home() {
 	return "/index";
     }
+
+    @GetMapping("/invoice")
+    public String invoice() {
+	return "/invoice";
+    }
 }

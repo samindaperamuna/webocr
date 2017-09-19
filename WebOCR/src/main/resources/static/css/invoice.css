@@ -1,0 +1,54 @@
+label {
+	vertical-align: top;
+}
+
+.col-centered {
+	float: none;
+	margin: 0 auto;
+}
+
+.platform {
+	padding: 20px;
+}
+
+.platform input, textarea {
+	width: 400px;
+}
+
+.item-table input {
+	margin: 0;
+	margin-left: 5px;
+	margin-top: 5px;
+	margin-bottom: 5px;
+	margin-right: 5px;
+}
+
+.item-table input.long-text {
+	width: 600px;
+}
+
+.item-table input[type=number] {
+	width: 50px;
+}
+
+.item-table button.clear {
+	margin-left: 40px;
+	margin-top: 10px;
+}
+
+.outter-border, .outer-border-end {
+	border-color: #eceff0;
+	border-style: solid;
+	border-left-width: thin;
+	border-top-width: thin;
+	border-bottom-width: thin;
+	border-right-width: 0;
+}
+
+.outer-border-end {
+	border-right-width: thin;
+}
+
+.clear-padding {
+	padding: unset;
+}

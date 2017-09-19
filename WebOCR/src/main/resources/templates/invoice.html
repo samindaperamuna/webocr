@@ -1,2 +1,146 @@
-<html>
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta content="text/html; charset=UTF-8" http-equiv="Content-Type" />
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+<title>Scan Invoice</title>
+
+<link rel="stylesheet" href="webjars/bootstrap/4.0.0-alpha.6-1/css/bootstrap.min.css" />
+<link rel="stylesheet" href="webjars/bootstrap-glyphicons/bdd2cbfba0/css/bootstrap-glyphicons.css" />
+<link rel="stylesheet" href="css/invoice.css" />
+<script type="text/javascript" src="webjars/jquery/3.2.0/jquery.js"></script>
+</head>
+<body>
+	<div class="container">
+		<div class="jumbotron">
+			<h1 class="display-3">Invoice</h1>
+			<hr class="my-4" />
+			<p class="h4">Please change the fields as required before saving the changes.</p>
+		</div>
+
+		<form>
+			<!-- Platform section start -->
+			<div class="platform">
+				<div class="row">
+					<div class="col-md-2">
+						<label>Company:</label>
+					</div>
+					<div class="col-md-10">
+						<input id="company" type="text" />
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-md-2">
+						<label>Receipt No:</label>
+					</div>
+					<div class="col-md-10">
+						<input id="receiptNo" type="text" />
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-md-2">
+						<label>Terms:</label>
+					</div>
+					<div class="col-md-10">
+						<input id="terms" type="text" />
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-md-2">
+						<label>Bill Date:</label>
+					</div>
+					<div class="col-md-10">
+						<input id="billDate" type="text" />
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-md-2">
+						<label>Due Date:</label>
+					</div>
+					<div class="col-md-10">
+						<input id="dueDate" type="text" />
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-md-2">
+						<label>Mailing Address:</label>
+					</div>
+					<div class="col-md-10">
+						<textarea id="mailingAddress"></textarea>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-md-2">
+						<label>Billing Address:</label>
+					</div>
+					<div class="col-md-10">
+						<textarea id="billingAddress"></textarea>
+					</div>
+				</div>
+			</div>
+			<!-- Platform section end -->
+
+			<!-- Item table start -->
+			<div class="item-table">
+				<div class="row">
+					<div class="col-md-1 outter-border">No</div>
+					<div class="col-md-1 outter-border">Quantity</div>
+					<div class="col-md-8 outter-border">Description</div>
+					<div class="col-md-1 outter-border">Amount</div>
+					<div class="col-md-1 text-center outter-border outer-border-end">Action</div>
+				</div>
+				<div class="row">
+					<div class="col-md-1 outter-border">1</div>
+					<div class="col-md-1 outter-border clear-padding text-right ">
+						<input type="number" />
+					</div>
+					<div class="col-md-8 outter-border clear-padding">
+						<input class="long-text" type="text" />
+					</div>
+					<div class="col-md-1 outter-border clear-padding text-right">
+						<input type="number" />
+					</div>
+					<div class="col-md-1 outter-border clear-padding outer-border-end text-left">
+						<button type="button" class="close clear " aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+						</button>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-md-1 outter-border">2</div>
+					<div class="col-md-1 outter-border clear-padding text-right ">
+						<input type="number" />
+					</div>
+					<div class="col-md-8 outter-border clear-padding">
+						<input class="long-text" type="text" />
+					</div>
+					<div class="col-md-1 outter-border clear-padding text-right">
+						<input type="number" />
+					</div>
+					<div class="col-md-1 outter-border clear-padding  outer-border-end">
+						<button type="button" class="close" aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+						</button>
+					</div>
+				</div>
+				<!-- Item Table End -->
+
+				<!-- Footer section start -->
+				<div class="row">
+					<div class="col-md-1">
+						<button type="button" class="btn btn-default" aria-label="Left Align">
+							<span class="glyphicon glyphicon-align-left" aria-hidden="true"></span>
+						</button>
+					</div>
+					<div class="col-md-1"></div>
+					<div class="col-md-8 text-right">Total</div>
+					<div class="col-md-1 clear-padding text-right">
+						<input type="number" />
+					</div>
+					<div class="col-md-1"></div>
+				</div>
+			</div>
+		</form>
+	</div>
+</body>
 </html>
