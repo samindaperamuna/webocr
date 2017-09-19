@@ -54,6 +54,10 @@
 			<scope>test</scope>
 		</dependency>
 		<dependency>
+			<groupId>org.webjars</groupId>
+			<artifactId>webjars-locator</artifactId>
+		</dependency>
+		<dependency>
 			<groupId>net.sourceforge.tess4j</groupId>
 			<artifactId>tess4j</artifactId>
 			<version>3.3.1</version>
@@ -68,16 +72,12 @@
 			<artifactId>bootstrap</artifactId>
 			<version>4.0.0-alpha.6-1</version>
 		</dependency>
-		<dependency>
-			<groupId>org.webjars</groupId>
-			<artifactId>bootstrap-glyphicons</artifactId>
-			<version>bdd2cbfba0</version>
-		</dependency>
-		<dependency>
-			<groupId>org.webjars</groupId>
-			<artifactId>webjars-locator</artifactId>
-		</dependency>
 
+		<dependency>
+			<groupId>org.webjars</groupId>
+			<artifactId>tether</artifactId>
+			<version>1.4.0</version>
+		</dependency>
 	</dependencies>
 
 	<build>

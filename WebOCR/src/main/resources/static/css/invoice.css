@@ -31,9 +31,8 @@ label {
 	width: 50px;
 }
 
-.item-table button.clear {
-	margin-left: 40px;
-	margin-top: 10px;
+.row button {
+	margin-top: 5px;
 }
 
 .outter-border, .outer-border-end {
@@ -51,4 +50,8 @@ label {
 
 .clear-padding {
 	padding: unset;
+}
+
+textarea.memo {
+	width: 620px;
 }
