@@ -30,7 +30,7 @@
 						<label>Company:</label>
 					</div>
 					<div class="col-md-10">
-						<input id="company" type="text" />
+						<input id="company" type="text" th:value="${invoice.companyName}" />
 					</div>
 				</div>
 				<div class="row">
@@ -38,7 +38,7 @@
 						<label>Receipt No:</label>
 					</div>
 					<div class="col-md-10">
-						<input id="receiptNo" type="text" />
+						<input id="receiptNo" type="text" th:value="${invoice.invoiceNumber}" />
 					</div>
 				</div>
 				<div class="row">
@@ -54,7 +54,7 @@
 						<label>Bill Date:</label>
 					</div>
 					<div class="col-md-10">
-						<input id="billDate" type="text" />
+						<input id="billDate" type="text" th:value="${invoice.date + ' ' + invoice.time}" />
 					</div>
 				</div>
 				<div class="row">
@@ -70,7 +70,7 @@
 						<label>Mailing Address:</label>
 					</div>
 					<div class="col-md-10">
-						<textarea id="mailingAddress"></textarea>
+						<textarea rows="3" id="mailingAddress" th:text="${invoice.address}"></textarea>
 					</div>
 				</div>
 				<div class="row">
@@ -78,7 +78,7 @@
 						<label>Billing Address:</label>
 					</div>
 					<div class="col-md-10">
-						<textarea id="billingAddress"></textarea>
+						<textarea rows="3" id="billingAddress"></textarea>
 					</div>
 				</div>
 			</div>

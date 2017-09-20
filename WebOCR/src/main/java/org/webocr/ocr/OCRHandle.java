@@ -6,7 +6,7 @@ import net.sourceforge.tess4j.ITesseract;
 import net.sourceforge.tess4j.Tesseract;
 import net.sourceforge.tess4j.TesseractException;
 
-public class TesseractHandle {
+public class OCRHandle {
 
     private static final String DATA_PATH = "/usr/share/tesseract-ocr/tessdata";
 

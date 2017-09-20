@@ -1,9 +1,10 @@
 package org.webocr.model;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Invoice {
+public class Invoice implements Serializable {
 
     String companyName;
     String address;

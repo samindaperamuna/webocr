@@ -1,6 +1,8 @@
 package org.webocr.model;
 
-public class SelectionData {
+import java.io.Serializable;
+
+public class SelectionData implements Serializable {
 
     int x;
     int y;

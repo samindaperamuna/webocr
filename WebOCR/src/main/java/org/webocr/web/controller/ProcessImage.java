@@ -3,22 +3,23 @@ package org.webocr.web.controller;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.webocr.data.SelectionListEditor;
+import org.webocr.data.XMLParser;
+import org.webocr.model.Invoice;
 import org.webocr.model.SelectionData;
 import org.webocr.model.SelectionList;
-import org.webocr.ocr.TesseractHandle;
+import org.webocr.ocr.OCRHandle;
 import org.webocr.util.ImageUtil;
 
-@RestController
+@Controller
 public class ProcessImage {
 
     @InitBinder
@@ -27,9 +28,11 @@ public class ProcessImage {
     }
 
     @PostMapping("/process")
-    public ResponseEntity<?> process(@RequestParam(value = "base64Image") MultipartFile base64Image,
+    public @ResponseBody Invoice process(@RequestParam(value = "base64Image") MultipartFile base64Image,
 	    @RequestParam(value = "selectionList") SelectionList selectionList) {
-
+	File templateFile = new File(getClass().getResource("/static/xml/template.xml").getPath());
+	Invoice invoice = null;
+	String ocrData = null;
 	byte[] imgBytes = null;
 
 	try {
@@ -46,19 +49,48 @@ public class ProcessImage {
 	    System.err.println("Cannot conver byte array into a buffred image.\n" + e.getLocalizedMessage());
 	}
 
-	for (SelectionData s : selectionList.getSelectionList()) {
-	    BufferedImage selection = ImageUtil.cropImage(img, s.getX(), s.getY(), s.getWidth(), s.getHeight());
-	    BufferedImage upscaledImage = ImageUtil.upscaleImage(selection);
+	if (selectionList.getSelectionList().isEmpty()) {
+	    SelectionData s = new SelectionData();
+	    s.setX(0);
+	    s.setY(0);
+	    s.setWidth(img.getWidth());
+	    s.setHeight(img.getHeight());
 
-	    try {
-		File file = ImageUtil.writeToTempFile(upscaledImage);
-		String data = TesseractHandle.processImage(file.getAbsolutePath());
-		System.out.println(data + "\n");
-	    } catch (IOException e) {
-		System.err.println("Cannot write to file.\n" + e.getLocalizedMessage());
+	    ocrData = saveSelection(img, s);
+	} else {
+	    for (SelectionData s : selectionList.getSelectionList()) {
+		ocrData = saveSelection(img, s);
 	    }
 	}
 
-	return new ResponseEntity<>("Successfully Received", new HttpHeaders(), HttpStatus.OK);
+	if (ocrData != null && templateFile != null) {
+	    invoice = XMLParser.readXML(ocrData, templateFile);
+	}
+
+	return invoice;
+    }
+
+    /**
+     * Crop the selection of the image, save it on to the disk and feed it to
+     * the OCR Handle.
+     * 
+     * @param img Image to be processed.
+     * @param s Selection to crop.
+     * @return
+     */
+    private String saveSelection(BufferedImage img, SelectionData s) {
+	BufferedImage selection = ImageUtil.cropImage(img, s.getX(), s.getY(), s.getWidth(), s.getHeight());
+	BufferedImage upscaledImage = ImageUtil.upscaleImage(selection);
+	String ocrData = null;
+
+	try {
+	    File file = ImageUtil.writeToTempFile(upscaledImage);
+	    ocrData = OCRHandle.processImage(file.getAbsolutePath());
+	    System.out.println(ocrData + "\n");
+	} catch (IOException e) {
+	    System.err.println("Cannot write to file.\n" + e.getLocalizedMessage());
+	}
+
+	return ocrData;
     }
 }

@@ -1,6 +1,8 @@
 package org.webocr.model;
 
-public class InvoiceItem {
+import java.io.Serializable;
+
+public class InvoiceItem implements Serializable {
 
     private String itemId;
     private String itemName;
