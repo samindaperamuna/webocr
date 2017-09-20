@@ -80,11 +80,17 @@ public class ProcessImage {
      */
     private String saveSelection(BufferedImage img, SelectionData s) {
 	BufferedImage selection = ImageUtil.cropImage(img, s.getX(), s.getY(), s.getWidth(), s.getHeight());
-	BufferedImage upscaledImage = ImageUtil.upscaleImage(selection);
+
+	// Apply an up scale.
+	selection = ImageUtil.upscaleImage(selection);
+
+	// Apply a sharpening effect.
+	selection = ImageUtil.sharpenImage(selection);
+
 	String ocrData = null;
 
 	try {
-	    File file = ImageUtil.writeToTempFile(upscaledImage);
+	    File file = ImageUtil.writeToTempFile(selection);
 	    ocrData = OCRHandle.processImage(file.getAbsolutePath());
 	    System.out.println(ocrData + "\n");
 	} catch (IOException e) {

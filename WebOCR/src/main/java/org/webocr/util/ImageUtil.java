@@ -4,6 +4,9 @@ import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.RenderingHints;
 import java.awt.image.BufferedImage;
+import java.awt.image.BufferedImageOp;
+import java.awt.image.ConvolveOp;
+import java.awt.image.Kernel;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
@@ -115,5 +118,19 @@ public class ImageUtil {
 	graphics2D.dispose();
 
 	return scaledImage;
+    }
+
+    /**
+     * Sharpen an image.
+     * 
+     * @param image BufferedImage to be sharpened.
+     * @return
+     */
+    public static BufferedImage sharpenImage(BufferedImage image) {
+	Kernel kernal = new Kernel(3, 3, new float[] { -1, -1, -1, -1, 9, -1, -1, -1, -1 });
+
+	BufferedImageOp op = new ConvolveOp(kernal);
+
+	return op.filter(image, null);
     }
 }
