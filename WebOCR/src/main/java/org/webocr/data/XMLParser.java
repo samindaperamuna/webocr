@@ -103,6 +103,7 @@ public class XMLParser {
 		}
 	    }
 
+	    bufferedReader.mark(0);
 	    lineValue = bufferedReader.readLine();
 
 	    // Check the line value for a pattern. If matches set the
@@ -114,6 +115,8 @@ public class XMLParser {
 
 		    // Clear the event queue.
 		    eventQueue.clear();
+		    // Reset the buffered reader.
+		    bufferedReader.reset();
 		}
 	    }
 
@@ -360,6 +363,10 @@ public class XMLParser {
 	    } else {
 		invoice.getItems().set(curItemIndex, item);
 	    }
+
+	    break;
+	case "invoice_total":
+	    invoice.setTotal(Float.parseFloat(fieldValue));
 
 	    break;
 	}
