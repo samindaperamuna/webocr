@@ -4,18 +4,26 @@ import java.io.Serializable;
 
 public class InvoiceItem implements Serializable {
 
-    private String itemId;
+    private int listPos;
     private String itemName;
     private int qty;
     private float price;
     private float totalPrice;
 
-    public String getItemId() {
-	return itemId;
+    public InvoiceItem() {
+
     }
 
-    public void setItemId(String itemId) {
-	this.itemId = itemId;
+    public InvoiceItem(int listPos) {
+	this.listPos = listPos;
+    }
+
+    public int getListPos() {
+	return listPos;
+    }
+
+    public void setListPos(int listPos) {
+	this.listPos = listPos;
     }
 
     public String getItemName() {

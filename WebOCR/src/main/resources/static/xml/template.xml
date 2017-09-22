@@ -24,7 +24,7 @@
 		<field name="invoice_number" />
 	</line>
 
-	<iterator>
+	<iterator pattern="^\d+\s+(item)\s+\d+\s+(units).+">
 		<line cols="5">
 			<field name="item_id" />
 			<field name="item_qty" />
@@ -32,6 +32,6 @@
 			<field name="item_price" />
 			<field name="total_price" />
 		</line>
-		<line field_name="item_desc" />
+		<line cols="1" field_name="item_desc" />
 	</iterator>
 </invoice>

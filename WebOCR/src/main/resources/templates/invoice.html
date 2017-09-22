@@ -93,18 +93,21 @@
 					<div class="col-md-1 outter-border">Amount</div>
 					<div class="col-md-1 text-center outter-border outer-border-end">Action</div>
 				</div>
-				<div class="row">
+
+				<!-- Automation starts here -->
+
+				<div class="row" th:each="item : ${invoice.items}">
 					<div class="col-md-1 outter-border">
-						<label class="item-no">1</label>
+						<label class="item-no" th:text="${item.listPos}"></label>
 					</div>
 					<div class="col-md-1 outter-border clear-padding text-right ">
-						<input type="number" />
+						<input type="number" th:value="${item.qty}" />
 					</div>
 					<div class="col-md-8 outter-border clear-padding">
-						<input class="long-text" type="text" />
+						<input class="long-text" type="text" th:value="${item.itemName}" />
 					</div>
 					<div class="col-md-1 outter-border clear-padding text-right">
-						<input type="number" />
+						<input type="number" th:value="${item.totalPrice}" />
 					</div>
 					<div class="col-md-1 outter-border clear-padding outer-border-end text-center">
 						<button type="button" class="btn btn-secondary btn-sm" aria-label="Close">
@@ -112,25 +115,8 @@
 						</button>
 					</div>
 				</div>
-				<div class="row">
-					<div class="col-md-1 outter-border">
-						<label class="item-no">2</label>
-					</div>
-					<div class="col-md-1 outter-border clear-padding text-right ">
-						<input type="number" />
-					</div>
-					<div class="col-md-8 outter-border clear-padding">
-						<input class="long-text" type="text" />
-					</div>
-					<div class="col-md-1 outter-border clear-padding text-right">
-						<input type="number" />
-					</div>
-					<div class="col-md-1 outter-border clear-padding outer-border-end text-center">
-						<button type="button" class="btn btn-secondary btn-sm" aria-label="Close">
-							<span class="fa fa-times" aria-hidden="true"></span>
-						</button>
-					</div>
-				</div>
+
+				<!-- Automation ends here -->
 
 				<!-- Footer section start -->
 				<div class="row">

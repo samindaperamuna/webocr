@@ -221,7 +221,10 @@ function postCoordData(blob, coords) {
 	contentType : false,
 	success : function(data) {
 		console.log('Image data sent to the server.');
-		$.redirect('/invoice', data);
+
+		$.redirect('/invoice', {
+			"jsonInvoice" : JSON.stringify(data)
+		});
 	},
 	error : function(data) {
 		console.log('An error occurred.');

@@ -20,7 +20,7 @@ import org.webocr.ocr.OCRHandle;
 import org.webocr.util.ImageUtil;
 
 @Controller
-public class ProcessImage {
+public class OCRController {
 
     @InitBinder
     public void initBinder(WebDataBinder binder) {
@@ -56,10 +56,10 @@ public class ProcessImage {
 	    s.setWidth(img.getWidth());
 	    s.setHeight(img.getHeight());
 
-	    ocrData = saveSelection(img, s);
+	    ocrData = doOCR(img, s);
 	} else {
 	    for (SelectionData s : selectionList.getSelectionList()) {
-		ocrData = saveSelection(img, s);
+		ocrData = doOCR(img, s);
 	    }
 	}
 
@@ -78,7 +78,7 @@ public class ProcessImage {
      * @param s Selection to crop.
      * @return
      */
-    private String saveSelection(BufferedImage img, SelectionData s) {
+    private String doOCR(BufferedImage img, SelectionData s) {
 	BufferedImage selection = ImageUtil.cropImage(img, s.getX(), s.getY(), s.getWidth(), s.getHeight());
 
 	// Apply an up scale.

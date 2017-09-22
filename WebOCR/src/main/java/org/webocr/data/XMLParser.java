@@ -3,31 +3,53 @@ package org.webocr.data;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.IOException;
 import java.io.StringReader;
 import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.Queue;
 import java.util.StringTokenizer;
 
 import javax.xml.stream.XMLEventReader;
 import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.events.Attribute;
+import javax.xml.stream.events.EndElement;
 import javax.xml.stream.events.StartElement;
 import javax.xml.stream.events.XMLEvent;
 
 import org.webocr.model.Invoice;
+import org.webocr.model.InvoiceItem;
 
 public class XMLParser {
 
-    public static String DELIMITER = " ";
+    public static final String DELIMITER = " ";
+
+    private static int cols;
+    private static int itemPos;
+    private static boolean iterator;
+    private static String lineValue;
+    private static StringTokenizer tokenizer;
+    private static String pattern;
+
+    private static Queue<XMLEvent> eventQueue = new LinkedList<>();
+    private static Invoice invoice = new Invoice();
+
+    static {
+	cols = 1;
+	itemPos = 1;
+	iterator = false;
+	lineValue = null;
+	tokenizer = null;
+	pattern = null;
+
+	eventQueue = new LinkedList<>();
+	invoice = new Invoice();
+    }
 
     public static Invoice readXML(String ocrText, File template) {
+	XMLInputFactory inputFactory = XMLInputFactory.newInstance();
 	StringReader stringReader = new StringReader(ocrText);
 	BufferedReader bufferedReader = new BufferedReader(stringReader);
-	Invoice invoice = new Invoice();
-	int cols = 1;
-	String lineValue = null;
-	StringTokenizer tokenizer = null;
-
-	XMLInputFactory inputFactory = XMLInputFactory.newInstance();
 
 	try (FileInputStream in = new FileInputStream(template)) {
 	    XMLEventReader reader = inputFactory.createXMLEventReader(in);
@@ -38,49 +60,15 @@ public class XMLParser {
 		if (event.isStartElement()) {
 		    StartElement startElement = event.asStartElement();
 
-		    if (startElement.getName().getLocalPart().equals("line")) {
-			String fieldName = null;
-
-			Iterator<?> attributes = startElement.getAttributes();
-
-			while (attributes.hasNext()) {
-			    Attribute attribute = (Attribute) attributes.next();
-
-			    if (attribute.getName().getLocalPart().equals("cols")) {
-				cols = Integer.parseInt(attribute.getValue());
-			    } else if (attribute.getName().getLocalPart().equals("field_name")) {
-				fieldName = attribute.getValue();
-			    }
-			}
-
-			lineValue = bufferedReader.readLine();
-			tokenizer = new StringTokenizer(lineValue, DELIMITER);
-
-			if (fieldName != null && cols == 1) {
-			    setFieldValue(invoice, fieldName, lineValue);
-			}
-		    } else if (startElement.getName().getLocalPart().equals("field")) {
-			String name = null;
-
-			Iterator<?> attributes = startElement.getAttributes();
-
-			while (attributes.hasNext()) {
-			    Attribute attribute = (Attribute) attributes.next();
-
-			    if (attribute.getName().getLocalPart().equals("name")) {
-				name = attribute.getValue();
-			    }
-			}
-
-			if (tokenizer.hasMoreTokens()) {
-			    String token = tokenizer.nextToken();
-
-			    if (name != null) {
-				setFieldValue(invoice, name, token);
-				name = null;
-			    }
-			}
+		    if (iterator) {
+			eventQueue.add(event);
+		    } else {
+			processStartElement(startElement, bufferedReader);
 		    }
+		} else if (event.isEndElement()) {
+		    EndElement endElement = event.asEndElement();
+
+		    processEndElement(endElement, bufferedReader);
 		}
 	    }
 	} catch (Exception e) {
@@ -88,6 +76,118 @@ public class XMLParser {
 	}
 
 	return invoice;
+    }
+
+    /**
+     * Process StartElement chain.
+     * 
+     * @param startElement Start element.
+     * @param bufferedReader
+     * @throws IOException
+     */
+    private static void processStartElement(StartElement startElement, BufferedReader bufferedReader)
+	    throws IOException {
+
+	if (startElement.getName().getLocalPart().equals("line")) {
+	    String fieldName = null;
+
+	    Iterator<?> attributes = startElement.getAttributes();
+
+	    while (attributes.hasNext()) {
+		Attribute attribute = (Attribute) attributes.next();
+
+		if (attribute.getName().getLocalPart().equals("cols")) {
+		    cols = Integer.parseInt(attribute.getValue());
+		} else if (attribute.getName().getLocalPart().equals("field_name")) {
+		    fieldName = attribute.getValue();
+		}
+	    }
+
+	    lineValue = bufferedReader.readLine();
+
+	    // Check the line value for a pattern. If matches set the
+	    // iterator to false.
+	    if (iterator) {
+		if (lineValue.matches(pattern)) {
+		    iterator = false;
+		    itemPos = 0;
+
+		    // Clear the event queue.
+		    eventQueue.clear();
+		}
+	    }
+
+	    tokenizer = new StringTokenizer(lineValue, DELIMITER);
+
+	    if (fieldName != null && cols == 1) {
+		setFieldValue(invoice, fieldName, lineValue);
+	    }
+	} else if (startElement.getName().getLocalPart().equals("field")) {
+	    String name = null;
+
+	    Iterator<?> attributes = startElement.getAttributes();
+
+	    while (attributes.hasNext()) {
+		Attribute attribute = (Attribute) attributes.next();
+
+		if (attribute.getName().getLocalPart().equals("name")) {
+		    name = attribute.getValue();
+		}
+	    }
+
+	    if (tokenizer.hasMoreTokens()) {
+		String token = tokenizer.nextToken();
+
+		if (name != null) {
+		    setFieldValue(invoice, name, token);
+		    name = null;
+		}
+	    }
+	} else if (startElement.getName().getLocalPart().equals("iterator")) {
+	    pattern = null;
+
+	    Iterator<?> attributes = startElement.getAttributes();
+
+	    while (attributes.hasNext()) {
+		Attribute attribute = (Attribute) attributes.next();
+
+		if (attribute.getName().getLocalPart().equals("pattern")) {
+		    pattern = attribute.getValue();
+		}
+	    }
+
+	    if (pattern != null) {
+		iterator = true;
+	    }
+	}
+    }
+
+    /**
+     * Process the EndElement
+     * 
+     * @param endElement End element.
+     * @param bufferedReader
+     */
+    private static void processEndElement(EndElement endElement, BufferedReader bufferedReader) throws IOException {
+	if (endElement.getName().getLocalPart().equals("iterator")) {
+
+	    // Process the event queue.
+	    while (iterator) {
+		Iterator<XMLEvent> eventIterator = eventQueue.iterator();
+
+		while (eventIterator.hasNext()) {
+		    XMLEvent event = eventIterator.next();
+
+		    if (event.isStartElement()) {
+			StartElement startElement = event.asStartElement();
+
+			processStartElement(startElement, bufferedReader);
+		    }
+		}
+
+		itemPos++;
+	    }
+	}
     }
 
     /**
@@ -130,6 +230,136 @@ public class XMLParser {
 	    break;
 	case "invoice_number":
 	    invoice.setInvoiceNumber(fieldValue);
+
+	    break;
+	case "item_id":
+	    InvoiceItem item = null;
+	    int curItemIndex = -1;
+
+	    for (int i = 0; i < invoice.getItems().size(); i++) {
+		if (invoice.getItems().get(i).getListPos() == itemPos) {
+		    item = invoice.getItems().get(i);
+		    curItemIndex = i;
+
+		    break;
+		}
+	    }
+
+	    if (curItemIndex < 0) {
+		item = new InvoiceItem(itemPos);
+	    }
+
+	    // item.setItemId(fieldValue);
+
+	    if (curItemIndex < 0) {
+		invoice.getItems().add(item);
+	    } else {
+		invoice.getItems().set(curItemIndex, item);
+	    }
+
+	    break;
+	case "item_qty":
+	    item = null;
+	    curItemIndex = -1;
+
+	    for (int i = 0; i < invoice.getItems().size(); i++) {
+		if (invoice.getItems().get(i).getListPos() == itemPos) {
+		    item = invoice.getItems().get(i);
+		    curItemIndex = i;
+
+		    break;
+		}
+	    }
+
+	    if (curItemIndex < 0) {
+		item = new InvoiceItem(itemPos);
+	    }
+
+	    item.setQty(Integer.parseInt(fieldValue));
+
+	    if (curItemIndex < 0) {
+		invoice.getItems().add(item);
+	    } else {
+		invoice.getItems().set(curItemIndex, item);
+	    }
+
+	    break;
+	case "item_price":
+	    item = null;
+	    curItemIndex = -1;
+
+	    for (int i = 0; i < invoice.getItems().size(); i++) {
+		if (invoice.getItems().get(i).getListPos() == itemPos) {
+		    item = invoice.getItems().get(i);
+		    curItemIndex = i;
+
+		    break;
+		}
+	    }
+
+	    if (curItemIndex < 0) {
+		item = new InvoiceItem(itemPos);
+	    }
+
+	    item.setPrice(Float.parseFloat(fieldValue));
+
+	    if (curItemIndex < 0) {
+		invoice.getItems().add(item);
+	    } else {
+		invoice.getItems().set(curItemIndex, item);
+	    }
+
+	    break;
+	case "total_price":
+	    item = null;
+	    curItemIndex = -1;
+
+	    for (int i = 0; i < invoice.getItems().size(); i++) {
+		if (invoice.getItems().get(i).getListPos() == itemPos) {
+		    item = invoice.getItems().get(i);
+		    curItemIndex = i;
+
+		    break;
+		}
+	    }
+
+	    if (curItemIndex < 0) {
+		item = new InvoiceItem(itemPos);
+	    }
+
+	    item.setTotalPrice(Float.parseFloat(fieldValue));
+
+	    if (curItemIndex < 0) {
+		invoice.getItems().add(item);
+	    } else {
+		invoice.getItems().set(curItemIndex, item);
+	    }
+
+	    break;
+	case "item_desc":
+	    item = null;
+	    curItemIndex = -1;
+
+	    for (int i = 0; i < invoice.getItems().size(); i++) {
+		if (invoice.getItems().get(i).getListPos() == itemPos) {
+		    item = invoice.getItems().get(i);
+		    curItemIndex = i;
+
+		    break;
+		}
+	    }
+
+	    if (curItemIndex < 0) {
+		item = new InvoiceItem(itemPos);
+	    }
+
+	    item.setItemName(fieldValue);
+
+	    if (curItemIndex < 0) {
+		invoice.getItems().add(item);
+	    } else {
+		invoice.getItems().set(curItemIndex, item);
+	    }
 
 	    break;
 	}
