@@ -21,7 +21,7 @@ public class TemplateServiceTest {
 
     @Test
     public void testSave() {
-	Template template = new Template("test.xml", "test.jpg");
+	Template template = new Template("test_template");
 
 	long id = templateService.save(template);
 

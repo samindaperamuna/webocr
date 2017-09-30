@@ -1,6 +1,7 @@
 package org.webocr.web.controller;
 
 import java.io.IOException;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -21,11 +22,16 @@ public class DefaultController {
     private TemplateService templateService;
 
     @GetMapping("/")
-    public String home() {
-	Template template = new Template("template.xml", "image.png");
-	templateService.save(template);
+    public ModelAndView home() {
+	ModelAndView mv = new ModelAndView("index");
 
-	return "index";
+	List<Template> templates = templateService.findAll();
+
+	if (templates != null) {
+	    mv.addObject("templates", templates);
+	}
+
+	return mv;
     }
 
     @GetMapping("/invoice")

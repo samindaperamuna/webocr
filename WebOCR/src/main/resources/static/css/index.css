@@ -19,6 +19,13 @@ input {
 	margin: 10px;
 }
 
+select#selectTemplate {
+	height: 300px;
+	width: 200px;
+	margin: 10px;
+	width: 200px;
+}
+
 input[type=file] {
 	width: 100%;
 }
@@ -83,6 +90,21 @@ div#wrapper {
 div#centerPanel {
 	width: 600px;
 	margin: 0 auto;
+}
+
+div#templateImageContainer {
+	display: flex;
+	width: 200px;
+	height: 300px;
+	padding: 10px;
+	padding-right: 0;
+	float: right;
+	width: 200px;
+}
+
+img#templateImage {
+	max-width: 100%;
+	max-height: 100%;
 }
 
 div.image-decorator {

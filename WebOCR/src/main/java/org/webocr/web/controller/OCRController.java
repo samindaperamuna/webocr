@@ -30,7 +30,7 @@ public class OCRController {
     @PostMapping("/process")
     public @ResponseBody Invoice process(@RequestParam(value = "base64Image") MultipartFile base64Image,
 	    @RequestParam(value = "selectionList") SelectionList selectionList) {
-	File templateFile = new File(getClass().getResource("/static/xml/template.xml").getPath());
+	File templateFile = new File(getClass().getResource("/static/xml/vic_computer.xml").getPath());
 	Invoice invoice = null;
 	String ocrData = null;
 	byte[] imgBytes = null;

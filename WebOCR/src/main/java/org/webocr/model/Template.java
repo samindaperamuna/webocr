@@ -16,31 +16,39 @@ public class Template {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long templateId;
 
-    @Column(name = "template_path")
-    private String templatePath;
+    @Column(name = "template_name", unique = true)
+    private String templateName;
 
-    @Column(name = "image_path")
-    private String imagePath;
+    @Column(name = "template_desc")
+    private String templateDesc;
 
     protected Template() {
 
     }
 
-    public Template(String templatePath, String imagePath) {
-	this.templatePath = templatePath;
-	this.imagePath = imagePath;
+    public Template(String templateName) {
+	this.templateName = templateName;
+    }
+
+    public Template(String templateName, String templateDesc) {
+	this.templateName = templateName;
+	this.templateDesc = templateDesc;
     }
 
     public long getTemplateId() {
 	return templateId;
     }
 
-    public String getTemplatePath() {
-	return templatePath;
+    public String getTemplateName() {
+	return templateName;
     }
 
-    public String getImagePath() {
-	return imagePath;
+    public String getTemplateDesc() {
+	return templateDesc;
+    }
+
+    public void setTemplateDesc(String templateDesc) {
+	this.templateDesc = templateDesc;
     }
 
     @Override
@@ -55,8 +63,7 @@ public class Template {
 
 	Template template = (Template) object;
 
-	if (this.templateId == template.templateId && this.templatePath.equals(template.templatePath)
-		&& this.imagePath.equals(template.imagePath)) {
+	if (this.templateId == template.templateId && this.templateName.equals(template.templateName)) {
 	    return true;
 	} else {
 	    return false;
