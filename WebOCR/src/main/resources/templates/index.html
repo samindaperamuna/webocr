@@ -35,7 +35,7 @@
 			<fieldset>
 				<legend>Please select the template</legend>
 
-				<select size="5" id="selectTemplate">
+				<select size="2" id="selectTemplate">
 					<option th:each="template: ${templates}" th:value="${template.templateId}" th:attr="data=${template.templateName}" th:text="${template.templateDesc}"></option>
 				</select>
 

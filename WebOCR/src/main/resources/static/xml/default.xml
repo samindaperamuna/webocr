@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE xml>
+
+<invoice xmlns="org.webocr.template" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="webocr template.xsd">
+	<line cols="1" field_name="company_name" />
+
+	<paragraph>
+		<line cols="1" field_name="address1" />
+		<line cols="1" field_name="address2" />
+		<line cols="1" field_name="address3" />
+	</paragraph>
+
+	<line cols="2">
+		<field name="invoice_type" />
+		<field />
+	</line>
+
+	<line cols="5">
+		<field />
+		<field />
+		<field name="date" />
+		<field name="time" />
+		<field name="invoice_number" />
+	</line>
+
+	<iterator pattern="^\d+\s+(item)\s+\d+\s+(units).+">
+		<line cols="5">
+			<field name="item_id" />
+			<field name="item_qty" />
+			<field />
+			<field name="item_price" />
+			<field name="total_price" />
+		</line>
+		<line cols="1" field_name="item_desc" />
+	</iterator>
+
+	<line cols="6">
+		<field />
+		<field />
+		<field />
+		<field />
+		<field />
+		<field name="invoice_total" />
+	</line>
+</invoice>

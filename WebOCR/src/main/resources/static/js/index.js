@@ -37,6 +37,7 @@ $(document).ready(function() {
 	// On Send to Server button click.
 	$('#sendButton').on('click', function() {
 		var dataUrl = $('#originalImage')[0].src;
+		var templateName = $('#selectTemplate option:selected').attr('data');
 		var areas = $('img#originalImage').selectAreas('areas');
 		var areasList = [];
 
@@ -51,7 +52,7 @@ $(document).ready(function() {
 
 		var imageBlob = dataURLtoBlob(dataUrl);
 
-		postCoordData(imageBlob, areasList)
+		postCoordData(imageBlob, templateName, areasList)
 	});
 
 	// On file input changed.
@@ -153,9 +154,10 @@ function dataURLtoBlob(dataURL) {
  * @param blob
  * @returns
  */
-function postCoordData(blob, coords) {
+function postCoordData(blob, templateName, coords) {
 	var formData = new FormData();
 	formData.append('base64Image', blob);
+	formData.append('templateName', templateName);
 	formData.append('selectionList', JSON.stringify({
 		'coords' : coords
 	}));

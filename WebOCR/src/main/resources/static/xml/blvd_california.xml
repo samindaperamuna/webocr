@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE xml>
+
+<invoice xmlns="org.webocr.template" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="webocr template.xsd">
+	<paragraph>
+		<line />
+		<line />
+		<line cols="1" field_name="address1" />
+		<line cols="1" field_name="address2" />
+		<line cols="1" field_name="telephone" />
+		<line cols="1" field_name="address3" />
+	</paragraph>
+
+	<paragraph>
+		<line cols="2">
+			<field name="invoice_number" />
+			<field />
+		</line>
+		<line />
+		<line cols="2">
+			<field />
+			<field name="time" />
+		</line>
+	</paragraph>
+
+	<iterator pattern="^(SUBTOTAL)\s\d+(.)\d{2}">
+		<line cols="3">
+			<field name="item_qty" />
+			<field name="item_desc" />
+			<field name="total_price" />
+		</line>
+	</iterator>
+
+	<line />
+	<line />
+
+	<line cols="2">
+		<field />
+		<field name="invoice_total" />
+	</line>
+	<line field_name="company_name" />
+</invoice>

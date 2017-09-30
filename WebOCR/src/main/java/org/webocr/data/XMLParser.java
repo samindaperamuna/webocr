@@ -34,7 +34,7 @@ public class XMLParser {
     private static Queue<XMLEvent> eventQueue = new LinkedList<>();
     private static Invoice invoice = new Invoice();
 
-    static {
+    private static void initialize() {
 	cols = 1;
 	itemPos = 1;
 	iterator = false;
@@ -47,6 +47,7 @@ public class XMLParser {
     }
 
     public static Invoice readXML(String ocrText, File template) {
+	initialize();
 	XMLInputFactory inputFactory = XMLInputFactory.newInstance();
 	StringReader stringReader = new StringReader(ocrText);
 	BufferedReader bufferedReader = new BufferedReader(stringReader);
@@ -217,6 +218,10 @@ public class XMLParser {
 	    break;
 	case "address3":
 	    invoice.setAddress(invoice.getAddress() + "\n" + fieldValue);
+
+	    break;
+	case "telephone":
+	    invoice.setTelephone(fieldValue);
 
 	    break;
 	case "invoice_type":
