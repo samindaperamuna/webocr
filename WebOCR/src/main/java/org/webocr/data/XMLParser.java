@@ -9,6 +9,8 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Queue;
 import java.util.StringTokenizer;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.xml.stream.XMLEventReader;
 import javax.xml.stream.XMLInputFactory;
@@ -17,6 +19,7 @@ import javax.xml.stream.events.EndElement;
 import javax.xml.stream.events.StartElement;
 import javax.xml.stream.events.XMLEvent;
 
+import org.apache.commons.lang3.math.NumberUtils;
 import org.webocr.model.Invoice;
 import org.webocr.model.InvoiceItem;
 
@@ -128,6 +131,7 @@ public class XMLParser {
 	    }
 	} else if (startElement.getName().getLocalPart().equals("field")) {
 	    String name = null;
+	    String fieldPattern = null;
 
 	    Iterator<?> attributes = startElement.getAttributes();
 
@@ -136,15 +140,27 @@ public class XMLParser {
 
 		if (attribute.getName().getLocalPart().equals("name")) {
 		    name = attribute.getValue();
+		} else if (attribute.getName().getLocalPart().equals("pattern")) {
+		    fieldPattern = attribute.getValue();
 		}
 	    }
 
-	    if (tokenizer.hasMoreTokens()) {
-		String token = tokenizer.nextToken();
+	    // If has a pattern defined use it.
+	    if (fieldPattern != null) {
+		Pattern p = Pattern.compile(fieldPattern);
+		Matcher m = p.matcher(lineValue);
 
-		if (name != null) {
-		    setFieldValue(invoice, name, token);
-		    name = null;
+		if (m.find()) {
+		    setFieldValue(invoice, name, m.group());
+		}
+	    } else {
+		if (tokenizer.hasMoreTokens()) {
+		    String token = tokenizer.nextToken();
+
+		    if (name != null) {
+			setFieldValue(invoice, name, token);
+			name = null;
+		    }
 		}
 	    }
 	} else if (startElement.getName().getLocalPart().equals("iterator")) {
@@ -283,7 +299,11 @@ public class XMLParser {
 		item = new InvoiceItem(itemPos);
 	    }
 
-	    item.setQty(Integer.parseInt(fieldValue));
+	    if (NumberUtils.isNumber(fieldValue)) {
+		item.setQty(Integer.parseInt(fieldValue));
+	    } else {
+		item.setQty(1);
+	    }
 
 	    if (curItemIndex < 0) {
 		invoice.getItems().add(item);
@@ -335,7 +355,11 @@ public class XMLParser {
 		item = new InvoiceItem(itemPos);
 	    }
 
-	    item.setTotalPrice(Float.parseFloat(fieldValue));
+	    if (NumberUtils.isNumber(fieldValue)) {
+		item.setTotalPrice(Float.parseFloat(fieldValue));
+	    } else {
+		item.setTotalPrice(0.00f);
+	    }
 
 	    if (curItemIndex < 0) {
 		invoice.getItems().add(item);
@@ -371,7 +395,11 @@ public class XMLParser {
 
 	    break;
 	case "invoice_total":
-	    invoice.setTotal(Float.parseFloat(fieldValue));
+	    if (NumberUtils.isNumber(fieldValue)) {
+		invoice.setTotal(Float.parseFloat(fieldValue));
+	    } else {
+		invoice.setTotal(0.00f);
+	    }
 
 	    break;
 	}

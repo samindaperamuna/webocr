@@ -26,9 +26,9 @@
 
 	<iterator pattern="^(SUBTOTAL)\s\d+(.)\d{2}">
 		<line cols="3">
-			<field name="item_qty" />
-			<field name="item_desc" />
-			<field name="total_price" />
+			<field name="item_qty" pattern="^\d+" />
+			<field name="item_desc" pattern="[^\d+][^\d]+" />
+			<field name="total_price" pattern="\d+(\.)\d+"/>
 		</line>
 	</iterator>
 
