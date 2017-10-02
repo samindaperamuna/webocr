@@ -245,11 +245,11 @@ public class XMLParser {
 
 	    break;
 	case "date":
-	    invoice.setDate(fieldValue);
+	    invoice.setInvoiceDate(fieldValue);
 
 	    break;
 	case "time":
-	    invoice.setTime(fieldValue);
+	    invoice.setInvoiceTime(fieldValue);
 
 	    break;
 	case "invoice_number":

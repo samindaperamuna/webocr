@@ -156,7 +156,7 @@ function dataURLtoBlob(dataURL) {
  */
 function postCoordData(blob, templateName, coords) {
 	var formData = new FormData();
-	formData.append('base64Image', blob);
+	formData.append('image', blob);
 	formData.append('templateName', templateName);
 	formData.append('selectionList', JSON.stringify({
 		'coords' : coords

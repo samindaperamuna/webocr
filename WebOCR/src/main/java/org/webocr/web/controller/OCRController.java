@@ -4,6 +4,7 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.webocr.data.SelectionListEditor;
 import org.webocr.data.XMLParser;
+import org.webocr.data.service.InvoiceService;
 import org.webocr.model.Invoice;
 import org.webocr.model.SelectionData;
 import org.webocr.model.SelectionList;
@@ -22,13 +24,16 @@ import org.webocr.util.ImageUtil;
 @Controller
 public class OCRController {
 
+    @Autowired
+    private InvoiceService invoiceService;
+
     @InitBinder
     public void initBinder(WebDataBinder binder) {
 	binder.registerCustomEditor(SelectionList.class, new SelectionListEditor());
     }
 
     @PostMapping("/process")
-    public @ResponseBody Invoice process(@RequestParam(value = "base64Image") MultipartFile base64Image,
+    public @ResponseBody Invoice process(@RequestParam(value = "image") MultipartFile image,
 	    @RequestParam(value = "templateName") String templateName,
 	    @RequestParam(value = "selectionList") SelectionList selectionList) {
 
@@ -45,7 +50,7 @@ public class OCRController {
 	byte[] imgBytes = null;
 
 	try {
-	    imgBytes = base64Image.getBytes();
+	    imgBytes = image.getBytes();
 	} catch (IOException e) {
 	    System.err.println("Cannot get image bytes.\n" + e.getLocalizedMessage());
 	}
@@ -74,6 +79,8 @@ public class OCRController {
 
 	if (ocrData != null && templateFile != null) {
 	    invoice = XMLParser.readXML(ocrData, templateFile);
+	    invoice.setImage(imgBytes);
+	    invoiceService.Save(invoice);
 	}
 
 	return invoice;
